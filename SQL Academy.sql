@@ -147,3 +147,41 @@ HAVING COUNT(t2.good) > 1
 SELECT member_name
 FROM FamilyMembers
 WHERE status LIKE 'mother'
+
+-- 23
+SELECT t1.good_name, MAX(t2.unit_price * t2.amount) unit_price
+FROM Goods t1
+         JOIN Payments t2 ON t1.good_id = t2.good
+         JOIN GoodTypes t3 ON t1.type = t3.good_type_id
+WHERE t3.good_type_name LIKE 'delicacies'
+GROUP BY t1.good_name
+ORDER BY MAX(t2.unit_price * t2.amount) DESC
+    LIMIT 1
+
+-- 24
+SELECT t1.member_name, SUM(t2.unit_price * t2.amount) costs
+FROM FamilyMembers t1
+         JOIN Payments t2 ON t1.member_id = t2.family_member
+WHERE t2.date BETWEEN '2005-06-01' AND '2005-06-30'
+GROUP BY t1.member_name
+
+-- 25
+SELECT good_name
+FROM Goods
+WHERE good_id NOT IN (
+    SELECT good
+    FROM Payments
+    WHERE YEAR(date) = 2005
+)
+
+-- 26
+SELECT DISTINCT good_type_name
+FROM GoodTypes t1
+         INNER JOIN Goods t2 ON t1.good_type_id = t2.type
+WHERE t1.good_type_id NOT IN (
+    SELECT good_type_id
+    FROM GoodTypes t1
+             JOIN Goods t2 ON t1.good_type_id = t2.type
+             JOIN Payments t3 ON t2.good_id = t3.good
+    WHERE YEAR(date) = 2005
+)
