@@ -185,3 +185,38 @@ WHERE t1.good_type_id NOT IN (
              JOIN Payments t3 ON t2.good_id = t3.good
     WHERE YEAR(date) = 2005
 )
+
+-- 27
+SELECT t1.good_type_name, SUM(unit_price * amount) costs
+FROM GoodTypes t1
+         JOIN Goods t2 ON t1.good_type_id = t2.type
+         JOIN Payments t3 ON t2.good_id = t3.good
+WHERE YEAR(t3.date) = '2005'
+GROUP BY t1.good_type_name
+
+-- 28
+SELECT COUNT(*) count
+FROM Trip
+WHERE town_from LIKE 'Rostov' AND town_to LIKE 'Moscow'
+
+-- 29
+SELECT DISTINCT t1.name
+FROM Passenger t1
+         JOIN Pass_in_trip t2 ON t1.id = t2.passenger
+         JOIN Trip t3 ON t2.trip = t3.id
+WHERE town_to LIKE 'Moscow' AND plane LIKE 'TU-134'
+
+-- 30
+SELECT trip, COUNT(*) count
+FROM Pass_in_trip
+GROUP BY trip
+ORDER BY count DESC
+
+-- 31
+SELECT *
+FROM FamilyMembers
+WHERE member_name LIKE '%Quincey'
+
+-- 32
+SELECT FLOOR(AVG(FLOOR(DATEDIFF(NOW(), birthday) / 365))) age
+FROM FamilyMembers
