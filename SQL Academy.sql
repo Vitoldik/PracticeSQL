@@ -220,3 +220,51 @@ WHERE member_name LIKE '%Quincey'
 -- 32
 SELECT FLOOR(AVG(FLOOR(DATEDIFF(NOW(), birthday) / 365))) age
 FROM FamilyMembers
+
+-- 33
+SELECT AVG(unit_price) cost
+FROM Goods t1
+         INNER JOIN Payments t2 ON t1.good_id = t2.good
+WHERE good_name = 'red caviar' OR good_name = 'black caviar'
+
+-- 34
+SELECT COUNT(*) count
+FROM Class
+WHERE name LIKE '10%'
+
+-- 35
+SELECT DISTINCT COUNT(*) count
+FROM Class t1
+    JOIN Schedule t2 ON t1.id = t2.class
+WHERE date = '2019-09-02'
+
+-- 36
+SELECT *
+FROM Student
+WHERE address LIKE 'ul. Pushkina%'
+
+-- 37
+SELECT FLOOR(MIN(DATEDIFF(NOW(), birthday) / 365)) year
+FROM Student
+-- или
+SELECT MIN(TIMESTAMPDIFF(YEAR, birthday, CURRENT_DATE)) year
+FROM Student
+
+-- 38
+SELECT COUNT(*) count
+FROM Student
+WHERE first_name = 'Anna'
+
+-- 39
+SELECT COUNT(*) count
+FROM Class t1
+    JOIN Student_in_class t2 ON t1.id = t2.class
+WHERE t1.name = '10 B'
+
+-- 40
+SELECT DISTINCT name subjects
+FROM Subject t1
+         JOIN Schedule t2 ON t1.id = t2.subject
+         JOIN Teacher t3 ON t2.teacher = t3.id
+WHERE t3.first_name = 'Pavel' AND t3.middle_name = 'Petrovich'
+  AND t3.last_name = 'Romashkin'
