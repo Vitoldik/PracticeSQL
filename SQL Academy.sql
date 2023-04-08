@@ -268,3 +268,30 @@ FROM Subject t1
          JOIN Teacher t3 ON t2.teacher = t3.id
 WHERE t3.first_name = 'Pavel' AND t3.middle_name = 'Petrovich'
   AND t3.last_name = 'Romashkin'
+
+-- 41
+SELECT start_pair
+FROM Timepair
+WHERE id = 4
+
+-- 42
+SELECT SEC_TO_TIME(SUM(TIMEDIFF(end_pair, start_pair))) time
+FROM Timepair
+WHERE id = 2 OR id = 4
+
+-- 43
+SELECT t1.last_name
+FROM Teacher t1
+         JOIN Schedule t2 ON t1.id = t2.teacher
+         JOIN Subject t3 ON t2.subject = t3.id
+WHERE t3.name LIKE 'Physical Culture'
+ORDER BY t1.last_name
+
+-- 44
+SELECT FLOOR(DATEDIFF(NOW(), t1.birthday) / 365) max_year
+FROM Student t1
+         JOIN Student_in_class t2 ON t1.id = t2.student
+         JOIN Class t3 ON t2.class = t3.id
+WHERE t3.name LIKE '10%'
+ORDER BY birthday
+    LIMIT 1
