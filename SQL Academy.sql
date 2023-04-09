@@ -295,3 +295,52 @@ FROM Student t1
 WHERE t3.name LIKE '10%'
 ORDER BY birthday
     LIMIT 1
+
+-- 45
+SELECT classroom
+FROM Schedule
+GROUP BY classroom
+HAVING COUNT(classroom) = (
+    SELECT COUNT(classroom)
+    FROM Schedule
+    GROUP BY classroom
+    ORDER BY COUNT(classroom) DESC
+    LIMIT 1
+)
+
+-- 46
+SELECT DISTINCT t3.name
+FROM Teacher t1
+         JOIN Schedule t2 ON t1.id = t2.teacher
+         JOIN Class t3 ON t2.class = t3.id
+WHERE t1.last_name LIKE 'Krauze'
+
+-- 47
+SELECT COUNT(*) count
+FROM Teacher t1
+    JOIN Schedule t2 ON t1.id = t2.teacher
+WHERE t1.last_name LIKE 'Krauze' AND t2.date = '2019-08-30'
+
+-- 48
+SELECT name, COUNT(t2.student) count
+FROM Class t1
+    JOIN Student_in_class t2 ON t1.id = t2.class
+GROUP BY t2.class
+ORDER BY count DESC
+
+-- 49
+SELECT (
+    SELECT COUNT(t2.student)
+    FROM Class t1
+        JOIN Student_in_class t2 ON t1.id = t2.class
+    WHERE t1.name LIKE '10 A'
+) / (
+    SELECT COUNT(t2.student)
+    FROM Class t1
+             JOIN Student_in_class t2 ON t1.id = t2.class
+) * 100 percent
+-- или
+SELECT COUNT(t1.student) * 100 / (SELECT COUNT(student) FROM Student_in_class) AS percent
+FROM Student_in_class t1
+    JOIN Class t2 ON t1.class = t2.id
+WHERE name = '10 A'
