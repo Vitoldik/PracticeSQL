@@ -344,3 +344,39 @@ SELECT COUNT(t1.student) * 100 / (SELECT COUNT(student) FROM Student_in_class) A
 FROM Student_in_class t1
     JOIN Class t2 ON t1.class = t2.id
 WHERE name = '10 A'
+
+-- 50
+SELECT FLOOR((COUNT(*) * 100 / (SELECT COUNT(*) FROM Student))) percent
+FROM Student
+WHERE YEAR(birthday) = '2000'
+
+-- 51
+INSERT INTO Goods
+SET good_id = (SELECT COUNT(*) + 1 FROM Goods t),
+    good_name = 'Cheese',
+    type = (
+        SELECT good_type_id FROM GoodTypes
+        WHERE good_type_name = 'food'
+    )
+-- или
+INSERT INTO Goods VALUES (
+    (SELECT COUNT(*) + 1 FROM Goods t),
+    'Cheese',
+    (SELECT good_type_id FROM GoodTypes
+    WHERE good_type_name = 'food')
+    )
+
+-- 52
+INSERT INTO GoodTypes VALUES (
+    (SELECT COUNT(*) + 1 FROM GoodTypes t),
+    'auto'
+    )
+
+-- 53
+UPDATE FamilyMembers
+SET member_name = 'Andie Anthony'
+WHERE member_name = 'Andie Quincey'
+
+-- 54
+DELETE FROM FamilyMembers
+WHERE member_name LIKE '%Quincey'
