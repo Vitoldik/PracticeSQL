@@ -380,3 +380,31 @@ WHERE member_name = 'Andie Quincey'
 -- 54
 DELETE FROM FamilyMembers
 WHERE member_name LIKE '%Quincey'
+
+-- 55
+DELETE FROM Company
+WHERE id IN (
+    SELECT company
+    FROM Trip
+    GROUP BY company
+    HAVING COUNT(*) = (
+        SELECT COUNT(company)
+        FROM Trip
+        GROUP BY company
+        ORDER BY COUNT(*)
+        LIMIT 1
+    )
+)
+
+-- 56
+DELETE FROM Trip
+WHERE town_from LIKE 'Moscow'
+
+-- 57
+UPDATE Timepair
+SET start_pair = ADDDATE(start_pair, INTERVAL 30 MINUTE),
+    end_pair = ADDDATE(end_pair, INTERVAL 30 MINUTE)
+-- или
+UPDATE Timepair
+SET start_pair = start_pair + INTERVAL 30 MINUTE,
+    end_pair = end_pair + INTERVAL 30 MINUTE
