@@ -408,3 +408,32 @@ SET start_pair = ADDDATE(start_pair, INTERVAL 30 MINUTE),
 UPDATE Timepair
 SET start_pair = start_pair + INTERVAL 30 MINUTE,
     end_pair = end_pair + INTERVAL 30 MINUTE
+
+-- 58
+INSERT INTO Reviews (id, reservation_id, rating)
+SELECT
+    (SELECT COUNT(*) + 1 FROM Reviews) id,
+    t2.id reservation_id,
+    '5'
+FROM Rooms t1
+         JOIN Reservations t2 ON t1.id = t2.room_id
+         JOIN Users t3 ON t2.user_id = t3.id
+WHERE address = '11218, Friel Place, New York' AND
+        t3.name = 'George Clooney'
+
+-- 59
+SELECT *
+FROM Users
+WHERE phone_number LIKE '+375%'
+
+-- 60
+SELECT t1.teacher
+FROM Schedule t1
+         JOIN Class t2 ON t1.class = t2.id
+WHERE t2.name LIKE '11%'
+GROUP BY t1.teacher
+HAVING COUNT(DISTINCT t2.name) = (
+    SELECT COUNT(id)
+    FROM Class
+    WHERE name LIKE '11%'
+)
