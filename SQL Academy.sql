@@ -437,3 +437,21 @@ HAVING COUNT(DISTINCT t2.name) = (
     FROM Class
     WHERE name LIKE '11%'
 )
+
+-- 61
+SELECT t1.*
+FROM Rooms t1
+         JOIN Reservations t2 ON t1.id = t2.room_id
+WHERE WEEK(start_date, 1) = 12 AND YEAR(start_date) = 2020
+
+-- 62
+SELECT SUBSTRING_INDEX(email, '@', -1) domain,
+COUNT(SUBSTRING_INDEX(email, '@', -1)) count
+FROM Users
+GROUP BY domain
+ORDER BY count DESC, domain
+
+-- 63
+SELECT CONCAT(last_name, '.', SUBSTRING(first_name, 1, 1), '.') name
+FROM Student
+ORDER BY name
