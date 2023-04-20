@@ -479,3 +479,7 @@ FROM Rooms t1
 WHERE t1.has_tv = 1 AND t1.has_internet = 1 AND t1.has_kitchen = 1
   AND t1.has_air_con = 1
 GROUP BY t1.id
+
+-- 67
+SELECT DISTINCT CONCAT(DATE_FORMAT(time_out, "%H:%i, %e.%c"), ' - ', DATE_FORMAT(time_in , "%H:%i, %e.%c")) flight_time
+FROM Trip
