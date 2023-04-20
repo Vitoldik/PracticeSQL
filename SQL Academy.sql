@@ -455,3 +455,27 @@ ORDER BY count DESC, domain
 SELECT CONCAT(last_name, '.', SUBSTRING(first_name, 1, 1), '.') name
 FROM Student
 ORDER BY name
+
+-- 64
+SELECT YEAR(start_date) year, MONTH(start_date) month, COUNT(*) amount
+FROM Reservations
+GROUP BY year, month
+HAVING amount >= 1
+ORDER BY year, month
+
+-- 65
+SELECT room_id, FLOOR(AVG(t2.rating)) rating
+FROM Reservations t1
+         JOIN Reviews t2 ON t1.id = t2.reservation_id
+         JOIN Rooms t3 ON t1.room_id = t3.id
+GROUP BY t1.room_id
+
+-- 66
+SELECT t1.home_type, t1.address,
+       IFNULL(SUM(DATEDIFF(t2.end_date, t2.start_date)), 0) days,
+       IFNULL(SUM(t2.total), 0) total_fee
+FROM Rooms t1
+         LEFT JOIN Reservations t2 ON t1.id = t2.room_id
+WHERE t1.has_tv = 1 AND t1.has_internet = 1 AND t1.has_kitchen = 1
+  AND t1.has_air_con = 1
+GROUP BY t1.id
