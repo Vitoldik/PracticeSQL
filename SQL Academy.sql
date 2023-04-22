@@ -483,3 +483,22 @@ GROUP BY t1.id
 -- 67
 SELECT DISTINCT CONCAT(DATE_FORMAT(time_out, "%H:%i, %e.%c"), ' - ', DATE_FORMAT(time_in , "%H:%i, %e.%c")) flight_time
 FROM Trip
+
+-- 68
+SELECT t.room_id, name, t.end_date
+FROM (
+         SELECT room_id, MAX(end_date) end_date
+         FROM Reservations
+         GROUP BY room_id
+     ) t
+         JOIN Reservations r
+              ON t.end_date = r.end_date
+                  AND t.room_id = r.room_id
+         JOIN Users u
+              ON r.user_id = u.id
+
+-- 69
+SELECT t1.owner_id, IFNULL(SUM(t2.total), 0) total_earn
+FROM Rooms t1
+         LEFT JOIN Reservations t2 ON t1.id = t2.room_id
+GROUP BY 1
