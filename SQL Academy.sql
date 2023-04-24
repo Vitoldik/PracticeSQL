@@ -502,3 +502,41 @@ SELECT t1.owner_id, IFNULL(SUM(t2.total), 0) total_earn
 FROM Rooms t1
          LEFT JOIN Reservations t2 ON t1.id = t2.room_id
 GROUP BY 1
+
+-- 70
+SELECT category, COUNT(*) count
+FROM (
+    SELECT
+        CASE
+            WHEN price <= 100 THEN 'economy'
+            WHEN price > 100 AND price < 200 THEN 'comfort'
+            WHEN price >= 200 THEN 'premium'
+        END category
+    FROM Rooms
+    ) t
+GROUP BY 1
+
+-- 71
+SELECT ROUND(COUNT(*) * 100 / (SELECT COUNT(*) FROM Users), 2) percent
+FROM
+    (
+        SELECT DISTINCT user_id
+        FROM Reservations
+        UNION
+        SELECT DISTINCT owner_id
+        FROM Rooms
+                 JOIN Reservations ON Reservations.room_id = Rooms.id
+    ) t1
+
+-- 72
+SELECT t1.id room_id, CEILING(AVG(t2.price)) avg_price
+FROM Rooms t1
+         JOIN Reservations t2 ON t1.id = t2.room_id
+GROUP BY t1.id
+
+-- 73
+SELECT t1.id room_id, COUNT(*) count
+FROM Rooms t1
+    JOIN Reservations t2 ON t1.id = t2.room_id
+GROUP BY t1.id
+HAVING count % 2 != 0
