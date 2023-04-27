@@ -109,3 +109,20 @@ SELECT DISTINCT `p`.`type`, `p`.`model`, `l`.`speed`
 FROM `laptop` `l`
 JOIN `product` `p` USING(`model`)
 WHERE `l`.`speed` < (SELECT MIN(speed) FROM `pc`)
+
+-- 18
+SELECT DISTINCT pt.maker, t1.minPrice price
+FROM (
+         SELECT MIN(price) minPrice
+         FROM Printer
+         WHERE color ='y'
+     ) t1
+         INNER JOIN Printer p ON t1.minPrice = p.price
+         INNER JOIN Product pt ON p.model = pt.model
+WHERE p.color = 'y'
+
+-- 19
+SELECT t1.maker, AVG(t2.screen)
+FROM product t1
+         INNER JOIN laptop t2 ON t1.model = t2.model
+GROUP BY t1.maker
