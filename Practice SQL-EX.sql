@@ -126,3 +126,16 @@ SELECT t1.maker, AVG(t2.screen)
 FROM product t1
          INNER JOIN laptop t2 ON t1.model = t2.model
 GROUP BY t1.maker
+
+-- 20
+SELECT maker, COUNT(model)
+FROM product
+WHERE type = 'pc'
+GROUP BY maker
+HAVING COUNT(DISTINCT model) >= 3
+
+-- 21
+SELECT t1.maker, MAX(t2.price)
+FROM product t1
+         JOIN pc t2 ON t1.model = t2.model
+GROUP BY t1.maker
