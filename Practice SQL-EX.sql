@@ -139,3 +139,73 @@ SELECT t1.maker, MAX(t2.price)
 FROM product t1
          JOIN pc t2 ON t1.model = t2.model
 GROUP BY t1.maker
+
+-- 22
+SELECT speed, AVG(price)
+FROM pc
+WHERE speed > 600
+GROUP BY speed
+
+
+-- 23
+SELECT DISTINCT t1.maker
+FROM product t1
+         JOIN pc t2 ON t1.model = t2.model
+WHERE t2.speed >= 750 AND t1.maker IN (
+    SELECT maker
+    FROM product p
+             JOIN laptop l ON p.model = l.model
+    WHERE l.speed >= 750
+)
+
+-- 24
+SELECT model
+FROM (
+         SELECT model, price
+         FROM pc
+         UNION
+         SELECT model, price
+         FROM Laptop
+         UNION
+         SELECT model, price
+         FROM Printer
+     ) t1
+WHERE price = (
+    SELECT MAX(price)
+    FROM (
+             SELECT price
+             FROM pc
+             UNION
+             SELECT price
+             FROM Laptop
+             UNION
+             SELECT price
+             FROM Printer
+         ) t2
+)
+
+-- 25
+SELECT DISTINCT maker
+FROM product
+WHERE model IN (
+    SELECT model
+    FROM pc
+    WHERE ram = (
+        SELECT MIN(ram)
+        FROM pc
+    )
+      AND speed = (
+        SELECT MAX(speed)
+        FROM pc
+        WHERE ram = (
+            SELECT MIN(ram)
+            FROM pc
+        )
+    )
+)
+  AND
+        maker IN (
+        SELECT maker
+        FROM product
+        WHERE type='printer'
+    )
