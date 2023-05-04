@@ -209,3 +209,38 @@ WHERE model IN (
         FROM product
         WHERE type='printer'
     )
+
+-- 26
+SELECT sum(t.price) / sum(t.amount) avgPrice
+FROM (
+    SELECT price, 1 amount
+    FROM product
+    JOIN pc ON product.model = pc.model
+    WHERE product.maker = 'A'
+    UNION all
+    SELECT price, 1 amount
+    FROM product
+    JOIN laptop ON product.model = laptop.model
+    WHERE product.maker = 'A'
+) t
+
+-- 27
+SELECT t1.maker maker, AVG(t2.hd) avg_hd
+FROM product t1
+         JOIN pc t2 ON t1.model = t2.model
+GROUP BY t1.maker
+HAVING t1.maker IN (
+    SELECT DISTINCT maker
+    FROM product
+    WHERE type = 'Printer'
+)
+
+-- 28
+SELECT COUNT(maker)
+FROM product
+WHERE maker IN (
+    SELECT maker
+    FROM product
+    GROUP BY maker
+    HAVING COUNT(model) = 1
+)
